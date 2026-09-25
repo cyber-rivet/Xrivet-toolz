@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-display: 'Syne', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #030712;
+    color: #f1f5f9;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+/* UIVerse Inspired Custom UI Styling & Micro-Interactions (Page 3 Inspired) */
+
+/* Matrix Grid Backdrop */
+.bg-grid-pattern {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+.bg-radial-gradient {
+  background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.18) 0%, rgba(99, 102, 241, 0.1) 35%, transparent 70%);
+}
+
+/* Glowing Glass Card Effect (uiverse.io layout aesthetic) */
+.uiverse-glass-card {
+  position: relative;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.uiverse-glass-card:hover {
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 30px -5px rgba(6, 182, 212, 0.25);
+  transform: translateY(-2px);
+}
+
+/* UIVerse Cyber Input Box with Animated Glowing Focus Line */
+.uiverse-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.uiverse-cyber-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(3, 7, 18, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.75rem;
+  color: #f8fafc;
+  font-size: 0.875rem;
+  transition: all 0.25s ease;
+}
+
+.uiverse-cyber-input:focus {
+  outline: none;
+  border-color: #22d3ee;
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+/* UIVerse Animated Cyber Login Box (Neon Spinning Border) */
+.uiverse-animated-cyber-card {
+  position: relative;
+  border-radius: 1.5rem;
+  background: #090d16;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.uiverse-animated-cyber-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent, 
+    rgba(34, 211, 238, 0.8), 
+    transparent 30%, 
+    rgba(129, 140, 248, 0.8), 
+    transparent 70%
+  );
+  animation: spinConic 6s linear infinite;
+}
+
+.uiverse-cyber-card-inner {
+  position: relative;
+  background: #0b1120;
+  border-radius: calc(1.5rem - 2px);
+  padding: 2rem;
+  z-index: 1;
+}
+
+@keyframes spinConic {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Neon Glow Button */
+.uiverse-button-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #030712;
+  background: linear-gradient(135deg, #22d3ee 0%, #38bdf8 50%, #818cf8 100%);
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.35);
+}
+
+.uiverse-button-primary:hover {
+  box-shadow: 0 0 25px rgba(34, 211, 238, 0.65);
+  transform: translateY(-1px);
+}
+
+.uiverse-button-primary:active {
+  transform: translateY(0);
+}
+
+/* Outline Glass Button */
+.uiverse-button-secondary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #e2e8f0;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.75rem;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.uiverse-button-secondary:hover {
+  background: rgba(51, 65, 85, 0.7);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+/* Admin Glowing Pulse Badge */
+.uiverse-gradient-badge {
+  background: linear-gradient(90deg, rgba(6, 182, 212, 0.15), rgba(99, 102, 241, 0.15));
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: #38bdf8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  letter-spacing: 0.025em;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090d16;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}

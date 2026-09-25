@@ -1,0 +1,8 @@
+{
+  "name": "XRivet Tool - Universal Free Public API Hub & Key Store",
+  "description": "XRivet Tool offers unified API keys, sandbox quotas, and interactive playground for hundreds of free public APIs across 30+ categories.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
