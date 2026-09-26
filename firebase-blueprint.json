@@ -1,0 +1,69 @@
+{
+  "entities": {
+    "users": {
+      "title": "Users",
+      "description": "Registered developer accounts and admin users",
+      "properties": {
+        "id": { "type": "string" },
+        "username": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "username", "email", "role"]
+    },
+    "apiKeys": {
+      "title": "API Keys",
+      "description": "Developer API keys and usage stats",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "key": { "type": "string" },
+        "tier": { "type": "string" },
+        "categories": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "usageToday": { "type": "number" },
+        "totalUsage": { "type": "number" },
+        "lastUsedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "key", "status"]
+    },
+    "publicApis": {
+      "title": "Public APIs Directory",
+      "description": "Public APIs catalog available in the gateway",
+      "properties": {
+        "id": { "type": "string" },
+        "API": { "type": "string" },
+        "Description": { "type": "string" },
+        "Auth": { "type": "string" },
+        "HTTPS": { "type": "boolean" },
+        "Cors": { "type": "string" },
+        "Category": { "type": "string" },
+        "Link": { "type": "string" },
+        "Endpoint": { "type": "string" },
+        "GatewayUrl": { "type": "string" },
+        "SampleResponse": { "type": "string" },
+        "RateLimit": { "type": "string" },
+        "AvgLatency": { "type": "string" },
+        "Popularity": { "type": "number" }
+      },
+      "required": ["id", "API", "Endpoint"]
+    },
+    "auditLogs": {
+      "title": "Audit Logs",
+      "description": "System and user action logs",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "user": { "type": "string" },
+        "action": { "type": "string" },
+        "details": { "type": "string" },
+        "ip": { "type": "string" }
+      },
+      "required": ["id", "timestamp", "action"]
+    }
+  }
+}

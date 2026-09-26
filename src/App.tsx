@@ -11,7 +11,9 @@ import { CodeSnippetModal } from './components/CodeSnippetModal';
 import { AuthModal } from './components/AuthModal';
 import { Footer } from './components/Footer';
 import { PUBLIC_APIS_DATABASE, PublicApiItem } from './data/publicApisData';
-import { Zap, ShieldCheck, ArrowRight, Key, Eye, EyeOff, Lock, User, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Zap, ArrowRight, Eye, EyeOff, CheckCircle2, AlertCircle } from 'lucide-react';
+
+import { syncUserToFirestore } from './lib/firebase';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'catalog' | 'playground' | 'pricing' | 'dashboard' | 'admin'>('catalog');
@@ -27,8 +29,25 @@ export default function App() {
   // Dynamic Public APIs catalog
   const [apisCatalog, setApisCatalog] = useState<PublicApiItem[]>(PUBLIC_APIS_DATABASE);
 
-  // Auth User State
-  const [currentUser, setCurrentUser] = useState<any | null>(null);
+  // Auth User State with Persistence
+  const [currentUser, setCurrentUser] = useState<any | null>(() => {
+    try {
+      const saved = localStorage.getItem('xrivet_session_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const saveUserSession = (user: any | null) => {
+    setCurrentUser(user);
+    if (user) {
+      localStorage.setItem('xrivet_session_user', JSON.stringify(user));
+      syncUserToFirestore(user);
+    } else {
+      localStorage.removeItem('xrivet_session_user');
+    }
+  };
   const [userKeys, setUserKeys] = useState<any[]>([]);
   const [activeUserApiKey, setActiveUserApiKey] = useState<string>('xrivet_live_free_demo_88a990');
 
@@ -105,7 +124,7 @@ export default function App() {
 
         setLoginSuccess(json.message);
         setTimeout(() => {
-          setCurrentUser(json.user);
+          saveUserSession(json.user);
           if (json.user.role === 'admin') {
             setActiveTab('admin');
           } else {
@@ -129,7 +148,7 @@ export default function App() {
 
         setLoginSuccess(json.message);
         setTimeout(() => {
-          setCurrentUser(json.user);
+          saveUserSession(json.user);
           setActiveTab('catalog');
         }, 800);
       }
@@ -141,14 +160,14 @@ export default function App() {
   };
 
   const handleLoginSuccess = (user: any) => {
-    setCurrentUser(user);
+    saveUserSession(user);
     if (user.role === 'admin') {
       setActiveTab('admin');
     }
   };
 
   const handleLogout = () => {
-    setCurrentUser(null);
+    saveUserSession(null);
     setLoginUsername('');
     setLoginPassword('');
     setLoginError(null);
@@ -178,7 +197,7 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // --- FIRST PAGE: FORCE FULL SCREEN LOGIN IF NOT LOGGED IN ---
+  // --- MANDATORY LOGIN SCREEN (No Guest Bypass) ---
   if (!currentUser) {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center items-center p-4 relative overflow-hidden selection:bg-cyan-500 selection:text-slate-950">
@@ -202,7 +221,7 @@ export default function App() {
                 XRivet<span className="text-cyan-400">Tool</span> Portal
               </h1>
               <p className="text-slate-400 text-xs sm:text-sm">
-                Sign in to access universal public API keys & developer dashboard.
+                Sign in or register to access universal public API keys & developer gateway.
               </p>
             </div>
 
@@ -313,24 +332,6 @@ export default function App() {
               </button>
 
             </form>
-
-            {/* Quick Guest Exploration Bypass */}
-            <div className="pt-2 border-t border-slate-800/80 text-center">
-              <button
-                type="button"
-                onClick={() => {
-                  setCurrentUser({
-                    id: 'usr_guest',
-                    username: 'Guest_Developer',
-                    email: 'guest@xrivet.tool',
-                    role: 'user'
-                  });
-                }}
-                className="text-xs text-slate-400 hover:text-cyan-400 font-medium underline transition-colors"
-              >
-                Explore APIs Catalog as Guest →
-              </button>
-            </div>
 
           </div>
         </div>

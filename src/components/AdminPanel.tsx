@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ShieldAlert, ShieldCheck, Users, Key, Plus, Layers, Activity, Lock, RefreshCw, Trash2, CheckCircle2, AlertCircle, DollarSign, Terminal, Globe } from 'lucide-react';
 import { API_CATEGORIES, PublicApiItem } from '../data/publicApisData';
 
+import { fetchFirestoreUsers } from '../lib/firebase';
+
 interface AdminPanelProps {
   adminUser: any;
   onApiAddedSuccess: () => void;
@@ -36,6 +38,25 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ adminUser, onApiAddedSuc
         headers: { 'x-admin-key': 'xrivet_admin_secret_key' }
       });
       const json = await res.json();
+      
+      // Also fetch directly from Firestore users collection
+      const firestoreUsers = await fetchFirestoreUsers();
+      
+      // Combine server users and firestore users
+      const existingUserMap = new Map();
+      if (json.users && Array.isArray(json.users)) {
+        json.users.forEach((u: any) => existingUserMap.set(u.id || u.username, u));
+      }
+      firestoreUsers.forEach((u: any) => {
+        if (!existingUserMap.has(u.id) && !existingUserMap.has(u.username)) {
+          existingUserMap.set(u.id, u);
+        }
+      });
+
+      const combinedUsers = Array.from(existingUserMap.values());
+      json.users = combinedUsers;
+      json.totalUsers = combinedUsers.length;
+
       setOverviewData(json);
     } catch (err) {
       console.error('Failed to load admin overview:', err);
